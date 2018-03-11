@@ -22,23 +22,33 @@ commander
     .version('0.1.0');
 
 var requestedCommandSet: string[] = [];
+/** Set command boolean on 'commander' property: */
 function setCommand(cmd) { requestedCommandSet.push(cmd) }
+
+commander
+    .command("listapps")
+    .description("list apps accessible with your identity credentials")
+    .action(() => setCommand('listapps'));
 
 commander
     .command("listintents")
     .description("list intents in the app")
-    // Set command boolean on 'commander' property:
     .action(() => setCommand('listintents'));
 
 commander
-    .command("getagent")
-    .description("get the whole agent/app, in platform format")
-    .action(() => setCommand('getagent'));
+    .command("getappinfo")
+    .description("Get info on the agent specified")
+    .action(() => setCommand('getappinfo'));
+
+commander
+    .command("getappv1")
+    .description("get the whole Google/Dialogflow V1 agent as an exported ZIP")
+    .action(() => setCommand('getappv1'));
 
 commander
     .command("getintent <intent_spec>")
     .description("get an intent, either by name or GUID (See listintents)")
-    .action((dir) => { commander.intentspec = dir; setCommand('getintent') });
+    .action((spec) => { commander.intentspec = spec; setCommand('getintent') });
 
 commander
     .command("putintent <intent_spec>")
@@ -60,6 +70,9 @@ function USAGE(msg) {
     commander.help();
     BAIL();
 }
+
+// commander seems broken: commander.args DOES NOT seem to end up with excess args:
+//if (commander.args.length > 0) USAGE(`UNKNOWN command line request: ${commander.args[0]}`);
 
 // ###################################################
 // #### Sanity check CLI parameters

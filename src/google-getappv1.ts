@@ -8,11 +8,11 @@ const ERROR = console.error;
 
 export async function doCommand(options: any) {
 
-    if (!options.projectId) throw new Error("projectId needed for getagent.");
+    if (!options.projectId) throw new Error("projectId needed for getapp.");
 
 
     // The 'await' keyword essentially returns the data items from the Promise's resolve():
-    output(await getagent(options));
+    output(await getapp(options));
 
 
     /** Output result as required, given return data from underlying API call: */
@@ -49,7 +49,7 @@ export async function doCommand(options: any) {
 
 
 /** Call underlying API to achieve command, returning the API's Promise: */
-export function getagent(options: any): Promise<any> {
+export function getapp(options: any): Promise<any> {
 
     const dialogflow = require('dialogflow');
 
