@@ -1,0 +1,27 @@
+{
+  "name": "voice-assistants-cli",
+  "version": "0.1.0",
+  "description": "A tool for Voice Assistant config management. More CLI, less GUI.",
+  "author": "Peter Nann",
+  "private": true,
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "bin": {
+    "va-cli": "./bin/va-cli.js"
+  },
+  "scripts": {
+    "build": "tsc --listEmittedFiles",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "cli-table": "^0.3.1",
+    "commander": "^2.15.0",
+    "dialogflow": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.4.31",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.7.2"
+  }
+}
