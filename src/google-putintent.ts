@@ -1,8 +1,7 @@
 
 import * as fs from 'fs';
 import * as dialogflow from 'dialogflow';
-//import { listintents } from './google-listintents';
-import { getGuid } from './google-intent-utils';
+import { getIntentGuid } from './google-listintents';
 
 const DBG = require('debug')('va-cli');
 const ERROR = console.error;
@@ -12,9 +11,9 @@ function BAIL(msg?: string) { (msg) && ERROR(msg); process.exit(1) }
 export async function doCommand(options: any) {
 
     if (!options.projectId) throw new Error("projectId needed for putintent");
-    if (!options.intentspec) throw new Error("intentSpec needed for putintent");
+    if (!options.spec) throw new Error("Spec needed for putintent");
 
-    let intentGuid = await getGuid(options.projectId, options.intentspec);
+    let intentGuid = await getIntentGuid(options.projectId, options.spec);
 
     // The 'await' keyword essentially returns the data items from the Promise's resolve():
     output(await putintent(intentGuid, options));

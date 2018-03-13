@@ -8,17 +8,12 @@ export async function doCommand(options: any) {
     if (!options.projectId) throw new Error("projectId needed for listintents");
 
     // The 'await' keyword essentially returns the data items from the Promises resolve():
-    return output(await listintents(options));
+    return output(await getIntents(options));
 
     /** Output result as required, given return data from underlying API call: */
-    function output(data) {
+    function output(intents) {
 
         const Table = require('cli-table');
-
-        // Data from query seems to be:
-        // an 'array of responses',
-        // containing an array of intents:
-        let intents = data[0];
 
         var table = new Table({
             head: ['Name', 'GUID', 'Info']
@@ -46,43 +41,40 @@ export async function doCommand(options: any) {
     }
 }
 
-/** Call underlying API to achieve command, returning the API's Promise: */
-export function listintents(options: any): Promise<any> {
+/** Call underlying API to get list of intents: */
+export async function getIntents(options: any) {
 
     const dialogflow = require('dialogflow');
 
-    var client = new dialogflow.v2beta1.IntentsClient({ /* optional auth parameters. */ });
+    const client = new dialogflow.v2beta1.IntentsClient({ /* optional auth parameters. */ });
 
-    var formattedParent = client.projectAgentPath(options.projectId);
+    const formattedParent = client.projectAgentPath(options.projectId);
 
-    // Pass up Promise:
-    return client.listIntents({ parent: formattedParent });
+    const responses = await client.listIntents({ parent: formattedParent });
+    // Data from API queries seems to be 'an array of responses':
+    // Usually the first item is interesting:
+    return responses[0];
 }
 
+/** Turn an IntentSpec of some type, into an Intent GUID, as required: */
+export async function getIntentGuid(projectId: string, spec: string) {
 
-    // // Or obtain the paged response.
-    // var formattedParent = client.projectAgentPath(projectId);
-    // var options = { autoPaginate: false };
-    // var callback = responses => {
-    //     // The actual resources in a response.
-    //     var resources = responses[0];
-    //     // The next request if the response shows that there are more responses.
-    //     var nextRequest = responses[1];
-    //     // The actual response object, if necessary.
-    //     // var rawResponse = responses[2];
-    //     for (let i = 0; i < resources.length; i += 1) {
-    //         // doThingsWith(resources[i]);
-    //     }
-    //     if (nextRequest) {
-    //         // Fetch the next page.
-    //         return client.listIntents(nextRequest, options).then(callback);
-    //     }
-    // }
-    // client.listIntents({ parent: formattedParent }, options)
-    //     .then(callback)
-    //     .catch(err => {
-    //         console.error(err);
-    //     });
-
+    let guid;
+    // May already be supplied as a GUI, or full resource path with GUID at the end:
+    const matches = spec.match(/(.*\/)?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/);
+    if (matches) {
+        guid = matches[2];
+        DBG("getIntentGuid():Spec is/contains GUID - using GUID:", guid);
+    } else {
+        DBG("getIntentGuid():Spec does not contain GUID - Assume Display Name:", spec);
+        const items = await getIntents({ projectId: projectId });
+        const foundIntent = items.find((intent) => { return intent.displayName === spec });
+        if (!foundIntent) throw new Error(`Cannot find intent named: ${spec}\n(Try listintents command)`);
+        // GUID is in .name field - go figure: Actualy GUID is the basename:
+        guid = foundIntent.name.replace(/.*\//, '');
+        DBG("getIntentGuid():Display name cross-referenced to GUID:", guid);
+    }
+    return guid;
+}
 
 

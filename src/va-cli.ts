@@ -4,6 +4,7 @@ process.env.GOOGLE_APPLICATION_CREDENTIALS = "/home/peter/.gcloud/ForgetMeNot-95
 
 import * as fs from 'fs';
 import * as commander from 'commander';
+
 const DBG = require('debug')('va-cli');
 const ERROR = console.error;
 function BAIL(msg?: string) { (msg) && ERROR(msg); process.exit(1) }
@@ -34,6 +35,19 @@ commander
     .command("listintents")
     .description("list intents in the app")
     .action(() => setCommand('listintents'));
+commander
+    .command("getintent <spec>")
+    .description("get an intent, either by name or GUID (See listintents)")
+    .action((spec) => { commander.spec = spec; setCommand('getintent') });
+
+commander
+    .command("listentities")
+    .description("list entities in the app")
+    .action(() => setCommand('listentities'));
+commander
+    .command("getentity <spec>")
+    .description("Get an entity, either by name or GUID (See listentities)")
+    .action((spec) => { commander.spec = spec; setCommand('getentity') });
 
 commander
     .command("getappinfo")
@@ -45,20 +59,16 @@ commander
     .description("get the whole Google/Dialogflow V1 agent as an exported ZIP")
     .action(() => setCommand('getappv1'));
 
-commander
-    .command("getintent <intent_spec>")
-    .description("get an intent, either by name or GUID (See listintents)")
-    .action((spec) => { commander.intentspec = spec; setCommand('getintent') });
 
 commander
-    .command("putintent <intent_spec>")
+    .command("putintent <spec>")
     .option('-f, --file', 'input file')
-    .action((intent_spec, cmd) => { commander.putintent_cmd = cmd; commander.intentspec = intent_spec; setCommand('getintent') })
+    .action((spec, cmd) => { commander.putintent_cmd = cmd; commander.spec = spec; setCommand('getintent') })
     .description("Put an intent model into the project.\n" +
-        "        If intent_spec matches an existing intent in the project, it will be updated.\n" +
+        "        If spec matches an existing intent in the project, it will be updated.\n" +
         "        Otherwise a new intent will (TODO!) be created.\n\n" +
         "Command options:\n" +
-        "    -f <file>    Input/Output file (else looks for file matching intent_spec)\n");
+        "    -f <file>    Input/Output file (else looks for file matching spec)\n");
 
 
 commander
