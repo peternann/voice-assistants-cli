@@ -13,7 +13,7 @@ export async function doCommand(options: any) {
 
 
     // The 'await' keyword essentially returns the data items from the Promise's resolve():
-    output(await getappinfo(options));
+    output(await getAppInfo(options));
 
 
     /** Output result as required, given return data from underlying API call: */
@@ -21,6 +21,10 @@ export async function doCommand(options: any) {
 
         DBG("Got data:");
         DBG(data);
+
+        const outFileName = `${options.dir}/APPINFO-${data.displayName}.json`;
+        fs.writeFileSync(outFileName, JSON.stringify(data, null, 2));
+        SAY("Wrote:", outFileName);
 
         const table = new Table();
 
@@ -47,7 +51,7 @@ export async function doCommand(options: any) {
 
 
 /** Call underlying API to achieve command, returning the API's Promise: */
-export async function getappinfo(options: any): Promise<any> {
+export async function getAppInfo(options: any): Promise<any> {
 
     const dialogflow = require('dialogflow');
 

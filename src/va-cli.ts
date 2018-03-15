@@ -48,6 +48,10 @@ commander
     .command("getentity <spec>")
     .description("Get an entity, either by name or GUID (See listentities)")
     .action((spec) => { commander.spec = spec; setCommand('getentity') });
+commander
+    .command("putentity <spec>")
+    .description("Create/Update an entity, either by name or GUID (See listentities)")
+    .action((spec) => { commander.spec = spec; setCommand('putentity') });
 
 commander
     .command("getappinfo")
@@ -59,11 +63,15 @@ commander
     .description("get the whole Google/Dialogflow V1 agent as an exported ZIP")
     .action(() => setCommand('getappv1'));
 
+commander
+    .command("getapp")
+    .description("get the whole Google/Dialogflow V2 agent as individual files.")
+    .action(() => setCommand('getapp'));
+
 
 commander
     .command("putintent <spec>")
-    .option('-f, --file', 'input file')
-    .action((spec, cmd) => { commander.putintent_cmd = cmd; commander.spec = spec; setCommand('getintent') })
+    .action((spec) => { commander.spec = spec; setCommand('putintent') })
     .description("Put an intent model into the project.\n" +
         "        If spec matches an existing intent in the project, it will be updated.\n" +
         "        Otherwise a new intent will (TODO!) be created.\n\n" +
@@ -103,21 +111,21 @@ DBG("Platform mode is:", commander.PLATFORM);
 const platform = require(`./${commander.PLATFORM}`);
 platform.rationaliseOptions(commander);
 
-if (!commander.directory) {
+if (!commander.dir) {
     if (fs.existsSync(`va-cli-output/.`))
-        commander.directory = 'va-cli-output';
+        commander.dir = 'va-cli-output';
     else
-        commander.directory = '.';
-    DBG("Output folder default to:", commander.directory);
+        commander.dir = '.';
+    DBG("Output folder defaulted to:", commander.dir);
 } else {
     // Clobber trailing slash if supplied: (Common with shell completion)
-    if (commander.directory.endsWith('/'))
-        commander.directory = commander.directory.substring(0, commander.directory.length - 1);
-    if (!fs.existsSync(`${commander.directory}/.`)) {
-        BAIL(`ERROR: specified output folder ${commander.directory}/ does not exist.`);
+    if (commander.dir.endsWith('/'))
+        commander.dir = commander.dir.substring(0, commander.dir.length - 1);
+    if (!fs.existsSync(`${commander.dir}/.`)) {
+        BAIL(`ERROR: specified output folder ${commander.dir}/ does not exist.`);
     }
 }
-DBG(`Output folder prefix to use: '${commander.directory}'`);
+DBG(`Output folder prefix to use: '${commander.dir}'`);
 
 // Check the user actually requested some command:
 if (requestedCommandSet.length <= 0) USAGE("No command given!");

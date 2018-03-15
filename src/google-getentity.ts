@@ -18,27 +18,28 @@ export async function doCommand(options: any) {
     const intentGuid = await getEntityGuid(options.projectId, options.spec);
 
     // The 'await' keyword essentially returns the data items from the Promise's resolve():
-    output(await getEntity(intentGuid, options));
+    writeEntity(await getEntity(intentGuid, options), options);
+
+}
 
 
-    /** Output result as required, given return data from underlying API call: */
-    function output(data) {
-        const filePath = `${options.directory}/ENTITY-${data.displayName}.json`;
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-        SAY(`Wrote entity file: ${filePath}`);
-    }
+/** Output result as required, given return data from underlying API call: */
+export function writeEntity(data, options) {
+    const filePath = `${options.dir}/ENTITY-${data.displayName}.json`;
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    SAY(`Wrote entity file: ${filePath}`);
 }
 
 
 /** Call underlying API to achieve command, returning the API's Promise: */
-export async function getEntity(guid: string, options: any) {
+export async function getEntity(resourceGuid: string, options: any) {
 
     try {
         const client = new dialogflow.v2beta1.EntityTypesClient({ /* optional auth parameters. */ });
+        if (!resourceGuid.includes('/'))
+            resourceGuid = client.entityTypePath(options.projectId, resourceGuid);
 
-        const formattedName = client.entityTypePath(options.projectId, guid);
-
-        const responses = await client.getEntityType({ name: formattedName });
+        const responses = await client.getEntityType({ name: resourceGuid });
         return responses[0];
     } catch (err) {
         BAIL(`ERROR: Dialogflow getEntity: ${err.message}`);
