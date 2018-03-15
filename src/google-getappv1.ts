@@ -32,17 +32,13 @@ export async function doCommand(options: any) {
         if (PK_Index > 0 && PK_Index < 16)
             zipBuffer = zipBuffer.slice(PK_Index);
 
-        let zipFilePath = `${options.directory}/${options.projectId}.zip`;
+        let zipFilePath = `${options.dir}/${options.projectId}.v1.zip`;
         fs.writeFileSync(zipFilePath, zipBuffer, 'binary');
-        SAY("Agent ZIP file created:", zipFilePath);
+        SAY("Wrote ZIP file:", zipFilePath);
 
         var AdmZip = require('adm-zip');
         var zipper = new AdmZip(zipBuffer);
-        zipper.extractAllTo(options.directory,/*overwrite=*/true);
-
-        //console.log(JSON.stringify(data, null, 3));
-        // console.log("ZIP Buffer:");
-        // console.dir(zipBuffer);
+        zipper.extractAllTo(`${options.dir}/v1zip`,/*overwrite=*/true);
 
     }
 }
