@@ -19,7 +19,7 @@ commander
     .option("-i, --identity <file|string>", "supply identity credentials for the platform")
     .option("-p, --project <projectId>", "Specify project ID (Optional if safely derivable)")
     .option("-d, --directory <dir>", "Use directory (folder) for input/output files")
-    .option("-b, --bare", "Screen output in bare format - plan, text-delimited")   // - TODO
+    .option("-b, --bare", "TODO: Screen output in bare format - plan, text-delimited")   // - TODO
     .version('0.1.0');
 
 var requestedCommandSet: string[] = [];
@@ -27,46 +27,40 @@ var requestedCommandSet: string[] = [];
 function setCommand(cmd) { requestedCommandSet.push(cmd) }
 
 commander
-    .command("listapps")
-    .description("list apps accessible with your identity credentials")
+    .command("listapps").description("list apps accessible with your identity credentials")
     .action(() => setCommand('listapps'));
 
 commander
-    .command("listintents")
-    .description("list intents in the app")
+    .command("listintents").description("list intents in the app")
     .action(() => setCommand('listintents'));
 commander
-    .command("getintent <spec>")
-    .description("get an intent, either by name or GUID (See listintents)")
+    .command("getintent <spec>").description("get an intent, either by name or GUID (See listintents)")
     .action((spec) => { commander.spec = spec; setCommand('getintent') });
 
 commander
-    .command("listentities")
-    .description("list entities in the app")
+    .command("listentities").description("list entities in the app")
     .action(() => setCommand('listentities'));
 commander
-    .command("getentity <spec>")
-    .description("Get an entity, either by name or GUID (See listentities)")
+    .command("getentity <spec>").description("Get an entity, either by name or GUID (See listentities)")
     .action((spec) => { commander.spec = spec; setCommand('getentity') });
 commander
-    .command("putentity <spec>")
-    .description("Create/Update an entity, either by name or GUID (See listentities)")
+    .command("putentity <spec>").description("Create/Update an entity, either by name or GUID (See listentities)")
     .action((spec) => { commander.spec = spec; setCommand('putentity') });
 
 commander
-    .command("getappinfo")
-    .description("Get info on the agent specified")
+    .command("getappinfo").description("Get info on the agent specified")
     .action(() => setCommand('getappinfo'));
 
 commander
-    .command("getappv1")
-    .description("get the whole Google/Dialogflow V1 agent as an exported ZIP")
+    .command("getappv1").description("get the whole Google/Dialogflow V1 agent as an exported ZIP")
     .action(() => setCommand('getappv1'));
 
 commander
-    .command("getapp")
-    .description("get the whole Google/Dialogflow V2 agent as individual files.")
+    .command("getapp").description("get the whole Google/Dialogflow V2 agent as individual files.")
     .action(() => setCommand('getapp'));
+commander
+    .command("putapp").description("The opposite of getapp.")
+    .action(() => setCommand('putapp'));
 
 
 commander
@@ -112,8 +106,8 @@ const platform = require(`./${commander.PLATFORM}`);
 platform.rationaliseOptions(commander);
 
 if (!commander.dir) {
-    if (fs.existsSync(`va-cli-output/.`))
-        commander.dir = 'va-cli-output';
+    if (fs.existsSync('va-cli-dir/.'))
+        commander.dir = 'va-cli-dir';
     else
         commander.dir = '.';
     DBG("Output folder defaulted to:", commander.dir);
