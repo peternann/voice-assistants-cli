@@ -28,9 +28,9 @@ export async function doCommand(options: any) {
     }
     if (!inputFilePath) throw new Error(`Cannot find Input file based on '${options.spec}'`);
 
-    const resource = JSON.parse(fs.readFileSync(inputFilePath).toString());
+    const item = JSON.parse(fs.readFileSync(inputFilePath).toString());
 
-    output(await putEntity(resource, options));
+    output(await putEntity(item, options));
 
 
     /** Output result as required, given return data from underlying API call: */
@@ -39,9 +39,9 @@ export async function doCommand(options: any) {
 
         // 'data' is actually the new resource as updated/created.
         // Update the file if it differs:
-        const resourceJson = JSON.stringify(data, null, 2);
-        if (JSON.stringify(data, null, 2).trim() !== resourceJson) {
-            fs.writeFileSync(inputFilePath, resourceJson);
+        const itemJson = JSON.stringify(data, null, 2);
+        if (JSON.stringify(data, null, 2).trim() !== itemJson) {
+            fs.writeFileSync(inputFilePath, itemJson);
             SAY("Wrote updated:", inputFilePath);
         }
 
@@ -50,27 +50,27 @@ export async function doCommand(options: any) {
 
 
 /** Call underlying API to achieve command, returning the API's Promise: */
-export async function putEntity(resource: any, options: any) {
+export async function putEntity(newItem: any, options: any) {
 
     try {
         const client = new dialogflow.v2beta1.EntityTypesClient({ /* optional auth parameters. */ });
 
-        const entities = await getEntities(options);
-        const existingEntity = entities.find(ent => { return ent.name === resource.name && ent.displayName === resource.displayName });
+        const items = await getEntities(options);
+        const existingItem = items.find(ent => { return ent.name === newItem.name && ent.displayName === newItem.displayName });
         let response;
-        if (existingEntity) {
-            DBG("UPDATING entity:", resource.name, '=', resource.displayName);
+        if (existingItem) {
+            DBG("UPDATING entity:", newItem.name, '=', newItem.displayName);
             const request = {
-                entityType: resource,
+                entityType: newItem,
             };
             response = await client.updateEntityType(request);
         } else {
-            DBG("CREATING entity:", resource.name);
+            DBG("CREATING entity:", newItem.name);
             // If doing a create, we must leave name (guid) field blank:
-            delete resource.name;
+            delete newItem.name;
             const request = {
                 parent: client.projectAgentPath(options.projectId),
-                entityType: resource,
+                entityType: newItem,
             };
             response = await client.createEntityType(request);
         }
