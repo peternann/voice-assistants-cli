@@ -26,26 +26,23 @@ export async function doCommand(options: any) {
         })
         .catch();
 
-    // Get the list of Intents in the app, then...
+    // Get the list of Intents in the app, then get them and save them...
     getIntents(options)
         .then(intents => {
-            // Run getIntent on each intent, via map(), capturing promises in intentProms:
-            let proms = intents.map(intent => getIntent(intent.name, options));
-            // Then wait for all proms, and apply write() method to each via map again:
-            Promise.all(proms)
-                .then(intents => { intents.map(res => writeIntent(res, options)); });
+            for (let intent of intents)
+                getIntent(intent.name, options)
+                    .then(intent => writeIntent(intent, options));
         })
         .catch();
 
     // As above:
     getEntities(options)
         .then(entities => {
-            let proms = entities.map(res => getEntity(res.name, options));
-            Promise.all(proms)
-                .then(entities => { entities.map(res => writeEntity(res, options)); });
+            for (let entity of entities)
+                getEntity(entity.name, options)
+                    .then(entity => writeEntity(entity, options));
         })
         .catch();
-
 }
 
 // Old non-parallel core code for above:
