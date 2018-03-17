@@ -1,0 +1,5 @@
+# If this file exists, it supercedes .gitignore for npm purposes.
+# We use this file to NOT ignore bin/folder for npm publishing.
+
+# But we DO ignore the .map files for publishing:
+bin/*.js.map

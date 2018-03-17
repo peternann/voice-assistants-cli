@@ -8,16 +8,17 @@
         ],
         // Required to stop some imports from failing: Go Figure:
         "moduleResolution": "node",
+        //"rootDir": "src",
         "outDir": "bin",
-        "sourceMap": false,
+        "sourceMap": true,
         // I like to see what's going on:
         "listEmittedFiles": true
     },
     "include": [
         "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
     ]
+    // "exclude": [
+    //     "node_modules",
+    //     "**/*.spec.ts"
+    // ]
 }

@@ -7,25 +7,29 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "va-cli(getagent)",
-            "program": "${workspaceRoot}/node_modules/ts-node/dist/bin.js",
+            "name": "va-cli",
+            //"stopOnEntry": true,
+            //"preLaunchTask": "npm: build",   // - Too slow!
+            "outFiles": [
+                "${workspaceFolder}/bin/**/*.js"
+            ],
+            "program": "${workspaceRoot}/src/va-cli.ts",
             "args": [
                 "src/va-cli",
+                "-i",
+                "~/.gcloud/ForgetMeNot-9573bc77b4c7-GCP-ServiceAccount-Key.json",
                 "-g",
-                "-d",
-                "agentData",
-                "getintent",
-                "FedTheAnimal"
+                "getappinfo"
+            ],
+            "runtimeArgs": [
+                "--nolazy"
             ],
             "env": {
                 "DEBUG": "va-cli*"
             },
             "console": "integratedTerminal",
-            "outputCapture": "std"
+            "outputCapture": "console"
             // ,
-            // "outFiles": [
-            //     "${workspaceFolder}/**/*.js"
-            // ]
-        }
+        },
     ]
 }
