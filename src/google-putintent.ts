@@ -53,7 +53,7 @@ export async function doCommand(options: any) {
 export async function putIntent(newItem: any, options: any) {
 
     try {
-        const client = new dialogflow.v2beta1.IntentsClient({ /* optional auth parameters. */ });
+        const client = new dialogflow.v2beta1.IntentsClient(options.dialogflowClientBaseOptions);
 
         const items = await getIntents(options);
         const existingItem = items.find(ent => { return ent.name === newItem.name && ent.displayName === newItem.displayName });

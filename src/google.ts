@@ -34,14 +34,13 @@ export function rationaliseOptions(options: any) {
         if (options.identitySpec && fs.existsSync(options.identitySpec)) {
             // The Project ID should be evident in this key file as JSON property 'project_id':
             options.projectId = JSON.parse(fs.readFileSync(options.identitySpec).toString()).project_id;
-            if (options.projectId) DBG("projectId obtained from -i specified identity file:", options.projectId);
+            if (options.projectId) WARN("WARNING: projectId obtained from -i specified identity file:", options.projectId);
         } else {
             if (process.env.GOOGLE_APPLICATION_CREDENTIALS && fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
                 options.projectId = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS).toString()).project_id;
-                if (options.projectId) DBG("projectId obtained env.GOOGLE_APPLICATION_CREDENTIALS file contents:", options.projectId);
+                if (options.projectId) WARN("WARNING: projectId obtained from env.GOOGLE_APPLICATION_CREDENTIALS file contents:", options.projectId);
             }
             // Could also pull it from existing data in output folder, if existant...
-
         }
     } catch (err) {
         // Ignore

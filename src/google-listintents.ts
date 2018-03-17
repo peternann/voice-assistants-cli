@@ -46,7 +46,7 @@ export async function getIntents(options: any) {
 
     const dialogflow = require('dialogflow');
 
-    const client = new dialogflow.v2beta1.IntentsClient({ /* optional auth parameters. */ });
+    const client = new dialogflow.v2beta1.IntentsClient(options.dialogflowClientBaseOptions);
 
     const formattedParent = client.projectAgentPath(options.projectId);
 

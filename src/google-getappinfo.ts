@@ -55,18 +55,7 @@ export async function getAppInfo(options: any): Promise<any> {
 
     const dialogflow = require('dialogflow');
 
-    // var client = new dialogflow.v2beta1.AgentsClient({ /* optional auth parameters. */ });
-
-    // var formattedName = client.intentPath(projectId, intentGuid);
-
-    // // intenView is required to get Training sentences in data:
-    // return client.getIntent({ name: formattedName, intentView: 'INTENT_VIEW_FULL' });
-
-
-
-    const client = new dialogflow.v2beta1.AgentsClient({
-        // optional auth parameters.
-    });
+    const client = new dialogflow.v2beta1.AgentsClient(options.dialogflowClientBaseOptions);
 
     const formattedParent = client.projectPath(options.projectId);
 
@@ -74,6 +63,4 @@ export async function getAppInfo(options: any): Promise<any> {
     const responses = await client.getAgent({ parent: formattedParent });
 
     return responses[0];
-
-
 }

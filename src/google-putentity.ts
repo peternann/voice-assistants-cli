@@ -53,7 +53,7 @@ export async function doCommand(options: any) {
 export async function putEntity(newItem: any, options: any) {
 
     try {
-        const client = new dialogflow.v2beta1.EntityTypesClient({ /* optional auth parameters. */ });
+        const client = new dialogflow.v2beta1.EntityTypesClient(options.dialogflowClientBaseOptions);
 
         const items = await getEntities(options);
         const existingItem = items.find(ent => { return ent.name === newItem.name && ent.displayName === newItem.displayName });

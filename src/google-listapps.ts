@@ -36,7 +36,7 @@ export async function listapps(options: any): Promise<any> {
 
     const dialogflow = require('dialogflow');
 
-    const client = new dialogflow.v2beta1.AgentsClient({ /* optional auth parameters. */ });
+    const client = new dialogflow.v2beta1.AgentsClient(options.dialogflowClientBaseOptions);
 
     // A project specified as '-' is a wildcard:
     const formattedParent = client.projectPath('-');

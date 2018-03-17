@@ -46,7 +46,7 @@ export async function getEntities(options: any) {
 
     const dialogflow = require('dialogflow');
 
-    const client = new dialogflow.v2beta1.EntityTypesClient({ /* optional auth parameters. */ });
+    const client = new dialogflow.v2beta1.EntityTypesClient(options.dialogflowClientBaseOptions);
 
     const formattedParent = client.projectAgentPath(options.projectId);
 

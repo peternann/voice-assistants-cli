@@ -35,7 +35,7 @@ export function writeEntity(data, options) {
 export async function getEntity(resourceGuid: string, options: any) {
 
     try {
-        const client = new dialogflow.v2beta1.EntityTypesClient({ /* optional auth parameters. */ });
+        const client = new dialogflow.v2beta1.EntityTypesClient(options.dialogflowClientBaseOptions);
         if (!resourceGuid.includes('/'))
             resourceGuid = client.entityTypePath(options.projectId, resourceGuid);
 

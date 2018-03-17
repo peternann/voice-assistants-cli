@@ -34,7 +34,7 @@ export function writeIntent(data, options) {
 export async function getIntent(resourceGuid: string, options: any) {
 
     try {
-        const client = new dialogflow.v2beta1.IntentsClient({ /* optional auth parameters. */ });
+        const client = new dialogflow.v2beta1.IntentsClient(options.dialogflowClientBaseOptions);
         if (!resourceGuid.includes('/'))
             resourceGuid = client.intentPath(options.projectId, resourceGuid);
         DBG("getIntent(): resourceGuid (name):", resourceGuid);

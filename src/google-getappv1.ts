@@ -49,48 +49,10 @@ export function getapp(options: any): Promise<any> {
 
     const dialogflow = require('dialogflow');
 
-    // var client = new dialogflow.v2beta1.AgentsClient({ /* optional auth parameters. */ });
-
-    // var formattedName = client.intentPath(projectId, intentGuid);
-
-    // // intenView is required to get Training sentences in data:
-    // return client.getIntent({ name: formattedName, intentView: 'INTENT_VIEW_FULL' });
-
-
-
-    var client = new dialogflow.v2beta1.AgentsClient({
-        // optional auth parameters.
-    });
+    var client = new dialogflow.v2beta1.AgentsClient(options.dialogflowClientBaseOptions);
 
     var formattedParent = client.projectPath(options.projectId);
 
     // Handle the operation using the promise pattern.
     return client.exportAgent({ parent: formattedParent })
-
-    // .then(responses => {
-    //     var operation = responses[0];
-    //     var initialApiResponse = responses[1];
-
-    //     // Operation#promise starts polling for the completion of the LRO.
-    //     return operation.promise();
-    // })
-    // .then(responses => {
-    //     // The final result of the operation.
-    //     var result = responses[0];
-
-    //     // The metadata value of the completed operation.
-    //     var metadata = responses[1];
-
-    //     // The response of the api call returning the complete operation.
-    //     var finalApiResponse = responses[2];
-    // })
-    // .catch(err => {
-    //     console.error(err);
-    // });
-
-
-
-
-
-
 }
