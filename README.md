@@ -1,8 +1,7 @@
-# (!!! DRAFT ONLY !!!)
 # voice-assistants-cli
 A tool for managing Voice Assistant models. More CLI, less GUI.
 
-`va-cli` facilitates 'get' and 'put' of your online voice assistant project 'language/interction model source', onto your local filesystem.
+`va-cli` facilitates 'get/put' of your online voice assistant project 'language/interction model source', onto/from your local filesystem.
 
 This achieves 2 aims:
 1. Version control of your interaction model, right alongside your source,
@@ -53,3 +52,9 @@ $ va-cli -g putentity Animals
 Show some debug of what's going on:
 ```sh
 $ DEBUG=va-cli va-cli -g getapp
+```
+
+## Source code
+This tool is written in TypeScript (see src folder), with common use of async/wait. This is compiled into Javascript targetting ES3, output to the bin folder. Beware reading the generated .js files - Your eyes may bleed from all the helper code supporting async/wait.
+
+The Google(Dialogflow) support is a wrapper around the [dialogflow](https://www.npmjs.com/package/dialogflow) npm package.
