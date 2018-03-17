@@ -1,5 +1,16 @@
-# If this file exists, it supercedes .gitignore for npm purposes.
-# We use this file to NOT ignore bin/folder for npm publishing.
+# Ignore the usuals:
+node_modules/
+.git/
+.gitignore
+.vscode/
 
-# But we DO ignore the .map files for publishing:
+# If this file exists, it supercedes .gitignore for npm purposes.
+# We use this to NOT ignore bin/folder for npm publishing.
+# But we DO ignore the .map files:
 bin/*.js.map
+# Don't need to push src to npm:
+src/
+# Default data dir:
+va-cli-dir/
+# Don't need compile config on npm:
+tsconfig.json
