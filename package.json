@@ -1,11 +1,11 @@
 {
   "name": "voice-assistants-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A tool for Voice Assistant model management. More CLI, less GUI.",
   "author": "Peter Nann",
   "private": false,
   "license": "GPL-3.0",
-  "repository": "github:spechter/voice-assistants-cli",
+  "repository": "github:peternann/voice-assistants-cli",
   "bin": {
     "va-cli": "bin/va-cli.js"
   },
