@@ -1,6 +1,6 @@
 {
   "name": "voice-assistants-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A tool for Voice Assistant model management. More CLI, less GUI.",
   "author": "Peter Nann",
   "private": false,
