@@ -1,6 +1,3 @@
-#!/usr/bin/env ts-node
-
-process.env.GOOGLE_APPLICATION_CREDENTIALS = "/home/peter/.gcloud/ForgetMeNot-9573bc77b4c7-GCP-ServiceAccount-Key.json";
 
 import * as fs from 'fs';
 import * as commander from 'commander';
@@ -16,10 +13,10 @@ commander
     .usage("<-g|-a> [options] <command> [command-options]")
     .option("-g, --google", "Google Assistant platform mode")
     .option("-a, --alexa", "Amazon Alexa ASK platform mode")
-    .option("-i, --identity <file|string>", "supply identity credentials for the platform")
+    .option("-i, --identity <file|string>", "supply identity credentials for the platform", id => commander.identitySpec = id)
     .option("-p, --project <projectId>", "Specify project ID (Optional if safely derivable)")
     .option("-d, --directory <dir>", "Use directory (folder) for input/output files")
-    .option("-b, --bare", "TODO: Screen output in bare format - plan, text-delimited")   // - TODO
+    // .option("-b, --bare", "TODO: Screen output in bare format - plan, text-delimited")   // - TODO
     .version('0.1.0');
 
 var requestedCommandSet: string[] = [];
@@ -27,19 +24,31 @@ var requestedCommandSet: string[] = [];
 function setCommand(cmd) { requestedCommandSet.push(cmd) }
 
 commander
-    .command("listapps").description("list apps accessible with your identity credentials")
+    .command("listapps").description("List apps accessible with your identity credentials")
     .action(() => setCommand('listapps'));
 
 commander
-    .command("listintents").description("list intents in the app")
-    .action(() => setCommand('listintents'));
+    .command("getapp").description("Get the whole Google/Dialogflow V2 agent as individual files.")
+    .action(() => setCommand('getapp'));
 commander
-    .command("getintent <spec>").description("get an intent, either by name or GUID (See listintents)")
-    .action((spec) => { commander.spec = spec; setCommand('getintent') });
+    .command("putapp").description("The opposite of getapp.")
+    .action(() => setCommand('putapp'));
+commander
+    .command("getappinfo").description("Get info on the agent specified")
+    .action(() => setCommand('getappinfo'));
+
+
 
 commander
-    .command("listentities").description("list entities in the app")
+    .command("listintents").description("List intents in the app")
+    .action(() => setCommand('listintents'));
+
+commander
+    .command("listentities").description("List entities in the app")
     .action(() => setCommand('listentities'));
+commander
+    .command("getintent <spec>").description("Get an intent, either by name or GUID (See listintents)")
+    .action((spec) => { commander.spec = spec; setCommand('getintent') });
 commander
     .command("getentity <spec>").description("Get an entity, either by name or GUID (See listentities)")
     .action((spec) => { commander.spec = spec; setCommand('getentity') });
@@ -48,24 +57,13 @@ commander
     .action((spec) => { commander.spec = spec; setCommand('putentity') });
 
 commander
-    .command("getappinfo").description("Get info on the agent specified")
-    .action(() => setCommand('getappinfo'));
-
-commander
-    .command("getappv1").description("get the whole Google/Dialogflow V1 agent as an exported ZIP")
-    .action(() => setCommand('getappv1'));
-
-commander
-    .command("getapp").description("get the whole Google/Dialogflow V2 agent as individual files.")
-    .action(() => setCommand('getapp'));
-commander
-    .command("putapp").description("The opposite of getapp.")
-    .action(() => setCommand('putapp'));
-
-
-commander
     .command("putintent <spec>")
     .action((spec) => { commander.spec = spec; setCommand('putintent') })
+
+commander
+    .command("getappv1").description("Get the whole Google/Dialogflow V1 agent as an exported ZIP")
+    .action(() => setCommand('getappv1'))
+
     .description("Put an intent model into the project.\n" +
         "        If spec matches an existing intent in the project, it will be updated.\n" +
         "        Otherwise a new intent will (TODO!) be created.\n\n" +
