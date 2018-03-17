@@ -5,11 +5,13 @@
   "author": "Peter Nann",
   "private": false,
   "license": "GPL-3.0",
+  "repository": "github:spechter/voice-assistants-cli",
   "bin": {
     "va-cli": "bin/va-cli.js"
   },
   "scripts": {
     "build": "tsc",
+    "prepare": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
